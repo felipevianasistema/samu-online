@@ -26,10 +26,8 @@
     - Api do Skype
     - Jquery
 4. Após clonar o projeto.
-
-  4.1. Acessar o diretório "web\sql" para localizar os scripts de criação/insert/DER do banco de dados.
-  4.3. Abrir projeto no NetBeans.
-  
+    - Acessar o diretório "web\sql" para localizar os scripts de criação/insert/DER do banco de dados.
+    - Abrir projeto no NetBeans.
 5. Usuário/senha de login
     - Usuário: felipe
     - Senha: 123456
