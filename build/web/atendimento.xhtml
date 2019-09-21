@@ -1,0 +1,387 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+        <ui:composition template="./WEB-INF/template/template.xhtml">
+            <ui:define name="top">
+                <script src="#{request.contextPath}/resources/js/pt_br_calendar.js" charset="UTF-8"></script>
+                <script type="text/javascript">
+                    //<![CDATA[
+                    $(document).ready(function () {
+                        $('#atendimento').addClass('on');
+                    });
+                    //]]>
+                </script>
+            </ui:define>
+
+            <ui:define name="content">
+                <br/>
+                <h:form id="form" prependId="false">
+                    <h:inputHidden id="campo-hidden" value="#{atendimentoMB.etapaAtendimento}"/>
+                    <h:commandButton id="btnInicio" style="display: none;" action="#{atendimentoMB.inicio}">
+                        <f:ajax execute="@form" render="@form"></f:ajax>
+                    </h:commandButton>
+
+                    <h:panelGroup rendered="#{atendimentoMB.etapaAtendimento eq 0}">
+                        <script type="text/javascript">
+                            //<![CDATA[
+                            $(document).ready(function () {
+                                $("[id$=btnInicio]").click();
+                            });
+                            //]]>
+                        </script>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <fieldset class="fieldset-content scroll-vertical">
+
+                            <legend style="padding: 5px;">
+                                <font face="arial" size="2" >
+                                    Atendimento
+                                </font>
+                            </legend>
+                            <p><p:messages id="messages" autoUpdate="true" closable="true"/></p>
+                            <div class="bg">
+                                <p:tabView cache="false" activeIndex="#{atendimentoMB.tabSelecionada}" dynamic="true">
+                                    <p:ajax event="tabChange" listener="#{atendimentoMB.onTabChange}" immediate="true" process="consultartab"/>
+                                    <!-- consultar -->
+                                    <p:tab id="consultartab" title="Consultar">
+
+                                        <h:panelGrid styleClass="formulario" columns="3">
+                                            <p:outputLabel for="consultar-codigo" value="Número do chamado:"/>
+                                            <p:inputMask mask="?9999999999" id="consultar-codigo" size="10" maxlength="10" value="#{atendimentoMB.objConsultaAtendimento.codigoAtendimento}"/>
+                                            <p:commandButton  ajax="true" process="consultartab" update="@form" actionListener="#{atendimentoMB.filtrarPesquisa}" value="Consultar"/>
+                                        </h:panelGrid>
+                                        <!-- Dialog do relatório do atendimento -->
+
+                                        <h:panelGroup style="padding: 7px; border-spacing: 5px;" binding="#{atendimentoMB.renderPainelConsultar}">
+                                            <div  id="impressao"> 
+                                                <h4>Dados do Atendimento</h4>
+                                                <br/>
+                                                <hr/>
+                                                <h:panelGrid styleClass="formulario" columns="2">
+                                                    <h:outputText class="negrito" value="Número do chamado: "/>
+                                                    <h:outputText value="#{atendimentoMB.objConsultaAtendimento.codigoAtendimento}"/>
+
+                                                    <h:outputText class="negrito" value="Status do atendimento:"/>
+                                                    <h:outputText value="Atendimento" rendered="#{atendimentoMB.objConsultaAtendimento.statusAtendimento eq 1}"/>
+                                                    <h:outputText value="Cancelado" rendered="#{atendimentoMB.objConsultaAtendimento.statusAtendimento eq 2}"/>
+                                                    <h:outputText value="Finalizado" rendered="#{atendimentoMB.objConsultaAtendimento.statusAtendimento eq 3}"/>
+
+                                                    <h:outputText class="negrito" value="Data do atendimento: "/>
+                                                    <h:outputText value="#{atendimentoMB.objConsultaAtendimento.dataAtendimento}">
+                                                        <f:convertDateTime timeZone="GMT-03-00" pattern="dd/MM/yyyy"/>
+                                                    </h:outputText>
+
+                                                    <h:outputText class="negrito" value="Motivo:"/>
+                                                    <h:outputText value="#{atendimentoMB.objConsultaAtendimento.motivo}"/>
+
+                                                    <h:outputText class="negrito" value="Tipo da ligação:"/>
+                                                    <h:outputText value="Emergencial" rendered="#{atendimentoMB.objConsultaAtendimento.tipoLigacao eq 69}"/>
+                                                    <h:outputText value="Simples" rendered="#{atendimentoMB.objConsultaAtendimento.tipoLigacao eq 83}"/>
+
+                                                </h:panelGrid>
+                                                <br/><br/>
+                                                <h4>Dados do Solicitante</h4>
+                                                <br/>
+                                                <hr/>
+                                                <h:panelGrid styleClass="formulario" columns="2">
+
+                                                    <h:outputText class="negrito" value="Nome: " />
+                                                    <h:outputText value="#{atendimentoMB.objConsultaAtendimento.objSolicitante.nome}"/>
+
+                                                    <h:outputText class="negrito" value="Telefone: "/>
+                                                    <h:outputText value="#{atendimentoMB.objConsultaAtendimento.objSolicitante.telefone}"/>
+
+                                                    <h:outputText class="negrito" value="Cidade: " />
+                                                    <h:outputText value="#{atendimentoMB.objConsultaAtendimento.objSolicitante.cidade}"/>
+
+                                                    <h:outputText class="negrito" value="Bairro: " />
+                                                    <h:outputText value="#{atendimentoMB.objConsultaAtendimento.objSolicitante.bairro}"/>
+
+                                                    <h:outputText class="negrito" value="Endereço: " />
+                                                    <h:outputText value="#{atendimentoMB.objConsultaAtendimento.objSolicitante.endereco}"/>
+
+                                                    <h:outputText class="negrito" value="Ponto de referência:"/>
+                                                    <h:outputText value="#{atendimentoMB.objConsultaAtendimento.objSolicitante.pontoReferencia}"/>
+
+                                                </h:panelGrid>
+                                                <br/><br/>
+                                                <h4>Dados do Paciente</h4>
+                                                <br/>
+                                                <hr/>
+                                                <ui:repeat var="item" value="#{atendimentoMB.objConsultaAtendimento.objListaPaciente}">
+                                                    <h:panelGrid columns="2" styleClass="formulario">
+                                                        <h:outputText class="negrito" value="Nome: "/>
+                                                        <h:outputText value="#{item.nome}"/>
+
+                                                        <h:outputText class="negrito" value="Data de nascimento: "/>
+                                                        <h:outputText value="#{item.dataNascimento}">
+                                                            <f:convertDateTime timeZone="GMT-03-00" pattern="dd/MM/yyyy"/>
+                                                        </h:outputText>
+
+                                                        <h:outputText class="negrito" value="Sexo: "/>
+                                                        <h:outputText value="Masculino" rendered="#{item.sexo eq 49}"/>
+                                                        <h:outputText value="Feminino" rendered="#{item.sexo eq 50}"/> 
+                                                    </h:panelGrid>
+                                                </ui:repeat>
+
+                                                <br/><br/>
+                                                <h4>Dados da(s) Viatura(s)</h4>
+                                                <br/>
+                                                <hr/>
+                                                <ui:repeat var="item" value="#{atendimentoMB.objConsultaAtendimento.objListaViatura}">
+                                                    <h:panelGrid styleClass="formulario" columns="2">
+                                                        <h:outputText class="negrito" value="Placa:"/>
+                                                        <h:outputText value="#{item.modelo}"/>
+
+                                                        <h:outputText class="negrito" value="Modelo:"/>
+                                                        <h:outputText value="#{item.placa}"/>
+
+                                                    </h:panelGrid>
+                                                </ui:repeat>
+
+                                                <br/><br/>
+                                                <h4>Dados do(s) médico(s)</h4>
+                                                <br/>
+                                                <hr/>
+                                                <ui:repeat var="item" value="#{atendimentoMB.objConsultaAtendimento.objListUsuarioFuncionario}">
+
+                                                    <h:panelGrid styleClass="formulario" columns="2">
+                                                        <h:outputLabel class="negrito" value="Nome:"/>
+                                                        <h:outputLabel value="#{item.nome}"/>
+                                                    </h:panelGrid>
+
+                                                </ui:repeat>
+
+                                                <!-- apenas será exibido se a ficha já estiver cadastrada -->
+                                                <br/><br/>
+                                                <h:panelGroup rendered="#{atendimentoMB.objConsultaAtendimento.objFichaAph.idFichaAph gt 0}">
+                                                    <h4>Ficha APH</h4>
+                                                    <br/>
+                                                    <hr/>
+                                                    <h:panelGrid styleClass="formulario" columns="2">
+
+                                                        <h:outputText class="negrito" value="Horário da transmissão:"/>
+                                                        <h:outputText value="#{atendimentoMB.objConsultaAtendimento.objFichaAph.horaTransmissao}"/>
+
+                                                        <h:outputText class="negrito" value="Horário da chegada no local:"/>
+                                                        <h:outputText value="#{atendimentoMB.objConsultaAtendimento.objFichaAph.horaChegadaLocal}"/>
+
+                                                        <h:outputText class="negrito" value="Horário da saída do local:"/>
+                                                        <h:outputText value="#{atendimentoMB.objConsultaAtendimento.objFichaAph.horaSaidaLocal}"/>
+
+                                                        <h:outputText class="negrito" value="Horário da chegada no hospital:"/>
+                                                        <h:outputText value="#{atendimentoMB.objConsultaAtendimento.objFichaAph.horaChegadaHospital}"/>
+
+                                                        <h:outputText class="negrito" value="Horário da ligação:"/>
+                                                        <h:outputText value="#{atendimentoMB.objConsultaAtendimento.objFichaAph.horaLigacao}"/>
+
+                                                        <h:outputText class="negrito" value="Data/hora do registro da ficha:"/>
+                                                        <h:outputText value="#{atendimentoMB.objConsultaAtendimento.objFichaAph.dataHoraRegistroFicha}">
+                                                            <f:convertDateTime parent="dd/MM/yyyy - HH:mm:ss" timeZone="GMT-03:00"/>
+                                                        </h:outputText>
+
+                                                        <h:outputText class="negrito" value="Produtos utilizados:"/>
+                                                        <h:outputText value="#{atendimentoMB.objConsultaAtendimento.objFichaAph.produtosUtilizado}"/>
+
+                                                    </h:panelGrid>  
+                                                </h:panelGroup>
+                                                <br/><br/>
+                                                <center>
+                                                    <a href="javascript:void()" onclick="impressao();">
+                                                        <h:graphicImage title="Imprimir relatório de atendimento" value="/img/print.png"/>
+                                                    </a>
+                    
+                                                    <hr style="width: 15%;"></hr>
+                                                    <script type="text/javascript">
+                                                        //<![CDATA[
+                                                        //print do relatório de atendimento
+                                                        function impressao() {
+                                                            var mywindow = window.open("","impressao","scrollbars=yes,width=500,height=500,left="+(screen.availWidth/2-250)+",top="+(screen.availHeight/2-250)+"");
+                                                            mywindow.document.write("<!DOCTYPE html><html><body style='font-family: Arial; background: #ccc; padding: 0; margin: 0; overflow:auto;'><div style='margin: 0; padding: 10px'>" + $("#impressao").html() + "</div></body></html>");
+                                                            mywindow.document.title = "Relatório do Atendimento";
+                                                            mywindow.document.close();
+                                                            mywindow.focus();
+                                                            mywindow.print();
+                                                            return false;
+                                                        }
+                                                        //]]>
+                                                    </script>
+                                                </center>
+                                            </div>  
+                                        </h:panelGroup>
+
+                                    </p:tab>
+
+                                    <!-- cadastrar -->
+                                    <!-- Apenas exibe se o perfil do usuário for Administrador ou Atendente da central -->
+                                    <p:tab title="Cadastrar" rendered="#{atendimentoMB.usuarioSessao.perfilIdPerfil eq 1 or atendimentoMB.usuarioSessao.perfilIdPerfil eq 3}">
+                                        <!-- Cadastra o atendimento -->
+                                        <h:panelGroup binding="#{atendimentoMB.renderPainelAtendimento}">
+                                            <h4>1-Registrar Atendimento.</h4>
+                                            <br/>
+                                            <hr/>
+                                            <br/>
+                                            <h:panelGrid styleClass="formulario" columns="2">
+                                                
+                                                <p:outputLabel for="status" value="Status:"/>
+                                                <p:selectOneMenu id="status" value="#{atendimentoMB.objAtendimento.statusAtendimento}">
+                                                    <f:selectItem itemLabel="Atendimento" itemValue="1"/>
+                                                </p:selectOneMenu>
+
+                                                <p:outputLabel for="motivo" value="Motivo:"/>
+                                                <p:inputTextarea id="motivo" cols="38" rows="5" maxlength="200" counter="display" counterTemplate="{0} caracteres restante(s)." autoResize="false" value="#{atendimentoMB.objAtendimento.motivo}" required="true" requiredMessage="Informe o motivo."/>
+
+                                                <h:outputText value=""/>
+                                                <h:outputText id="display"/> 
+
+                                                <p:outputLabel for="tipo-ligacao" value="Tipo de ligação: "/>
+                                                <p:selectOneMenu id="tipo-ligacao" value="#{atendimentoMB.objAtendimento.tipoLigacao}" required="true" requiredMessage="Selecione o tipo da ligação.">
+                                                    <f:selectItem itemLabel="-- selecione --" itemValue=""/>
+                                                    <f:selectItem itemLabel="Emergencial" itemValue="E"/>
+                                                    <f:selectItem itemLabel="Simples" itemValue="S"/>
+                                                </p:selectOneMenu>
+
+                                            </h:panelGrid>
+                                            <br/><br/>
+                                            <p:commandButton ajax="false" value="Avançar" id="bt-etapa-1" actionListener="#{atendimentoMB.registrarSolicitante}"/>
+                                        </h:panelGroup>
+
+                                        <!-- Registrar solicitante -->
+                                        <h:panelGroup binding="#{atendimentoMB.renderPainelSolicitante}">
+                                            <h4>2-Registrar Solicitante.</h4>
+                                            <br/>
+                                            <hr/>
+                                            <br/>
+                                            <h:panelGrid columns="2" styleClass="formulario">
+
+                                                <p:outputLabel for="nome" value="Nome:"/>
+                                                <p:inputText id="nome" size="43" maxlength="70" value="#{atendimentoMB.objAtendimento.objSolicitante.nome}" required="true" requiredMessage="Informe o nome."/>
+
+                                                <p:outputLabel for="telefone" value="Telefone:"/>
+                                                <p:inputMask mask="(999)9999-9999" id="telefone" maxlength="14" size="13" value="#{atendimentoMB.objAtendimento.objSolicitante.telefone}" required="true" requiredMessage="Informe o telefone."/>
+
+                                                <p:outputLabel for="cidade" value="Cidade:"/>
+                                                <p:inputText id="cidade" maxlength="30" size="13" value="#{atendimentoMB.objAtendimento.objSolicitante.cidade}" required="true" requiredMessage="Informe a cidade."/>
+
+                                                <p:outputLabel for="bairro" value="Bairro:"/>
+                                                <p:inputText id="bairro" maxlength="35" size="13" value="#{atendimentoMB.objAtendimento.objSolicitante.bairro}" required="true" requiredMessage="Informe o bairro."/>
+
+                                                <p:outputLabel for="endereco" value="Endereço:"/>
+                                                <p:inputText id="endereco" maxlength="70" size="43" value="#{atendimentoMB.objAtendimento.objSolicitante.endereco}" required="true" requiredMessage="Informe o endereço."/>
+
+                                                <p:outputLabel for="ponto-referencia" value="Ponto de referência:"/>
+                                                <p:inputTextarea cols="40" rows="4" maxlength="50" counter="display2" counterTemplate="{0} caracteres restante(s)." autoResize="false" readonly="8" id="ponto-referencia" value="#{atendimentoMB.objAtendimento.objSolicitante.pontoReferencia}" required="true" requiredMessage="Informe o ponto de referência."/>
+
+                                                <h:outputText value=""/>
+                                                <h:outputText id="display2"/> 
+                                            </h:panelGrid>
+
+                                            <br/>
+                                            <h:panelGrid columns="3" styleClass="formulario">
+                                                <p:commandButton ajax="false" value="Voltar" immediate="true" actionListener="#{atendimentoMB.registrarAtendimento}"/>
+                                                <p:commandButton ajax="false" value="Avançar" actionListener="#{atendimentoMB.registrarPaciente}"/>
+                                                <p:commandButton ajax="false" value="Cancelar" actionListener="#{atendimentoMB.cancelar}" immediate="true"/>
+                                            </h:panelGrid>
+
+                                        </h:panelGroup>
+
+                                        <!-- Registrar paciente -->
+                                        <h:panelGroup binding="#{atendimentoMB.renderPainelPaciente}">
+                                            <h4>3-Registrar Paciente.</h4>
+                                            <br/>
+                                            <hr/>
+                                            <br/>                                   
+                                            <h:commandLink actionListener="#{atendimentoMB.adicionarPacientes}">
+                                                <h:graphicImage value="/img/add_paciente.png" alt="Adicionar paciente" title="Adicionar paciente"/>
+                                            </h:commandLink>
+                                            <br/>
+                                            <h:outputText value="Pacientes adicionado: #{atendimentoMB.objAtendimento.objListaPaciente.size()}"/>
+                                            <br/>
+                                            <h:panelGrid columns="2" styleClass="formulario">
+
+                                                <p:outputLabel for="nome-paciente" value="Nome:"/>
+                                                <p:inputText id="nome-paciente" size="43" maxlength="70" value="#{atendimentoMB.objAtendimento.objPaciente.nome}" required="true" requiredMessage="Informe o nome."/>
+
+                                                <p:outputLabel for="data-nascimento-paciente" value="Data de nascimento:"/>
+                                                <p:calendar size="10" pattern="dd/MM/yyyy" navigator="true" locale="pt_BR" id="data-nascimento-paciente" value="#{atendimentoMB.objAtendimento.objPaciente.dataNascimento}" required="true" requiredMessage="Informe a data.">
+                                                    <f:convertDateTime locale="pt-BR" pattern="dd/MM/yyyy" timeZone="GMT-03:00"/>
+                                                </p:calendar>
+
+                                                <p:outputLabel for="sexo-paciente" value="Sexo:"/>
+                                                <p:selectOneRadio id="sexo-paciente" value="#{atendimentoMB.objAtendimento.objPaciente.sexo}" required="true" requiredMessage="Selecione o sexo.">
+                                                    <f:selectItem itemLabel="M" itemValue="1"/>
+                                                    <f:selectItem itemLabel="F" itemValue="2"/>
+                                                </p:selectOneRadio>
+
+                                            </h:panelGrid>
+                                            <br/>
+                                            <h:panelGrid columns="3" styleClass="formulario">
+                                                <p:commandButton ajax="false" value="Voltar" immediate="true" actionListener="#{atendimentoMB.voltar}"/>
+                                                <p:commandButton ajax="false" value="Avançar" immediate="true" actionListener="#{atendimentoMB.registrarViaturas}"/>
+                                                <p:commandButton ajax="false" value="Cancelar" actionListener="#{atendimentoMB.cancelar}" immediate="true"/>
+                                            </h:panelGrid>
+
+                                        </h:panelGroup>
+
+                                        <!-- Registrar viaturas -->
+                                        <h:panelGroup styleClass="formulario" binding="#{atendimentoMB.renderPainelViaturaMedico}">
+                                            <h4>4-Registrar Viaturas e Médicos.</h4>
+                                            <br/>
+                                            <hr/>
+                                            <br/>
+                                            <p:outputLabel for="viaturas" value="Selecione a(s) viatura(s):"/>
+                                            <br/>
+                                            <br/>
+                                            <p:pickList id="viaturas" value="#{atendimentoMB.dualListViaturas}" var="itens" itemLabel="#{itens}" itemValue="#{itens}"
+                                                        converter="pickListViaturasConverter" required="#{atendimentoMB.viaturasTarget.size() eq 0}" requiredMessage="Selecione a(s) viatura(s).">
+
+                                                <f:facet name="sourceCaption">Disponíveis</f:facet>
+                                                <f:facet name="targetCaption">Selecionados</f:facet>
+
+                                                <p:column>
+                                                    <h:outputText value="#{itens.codigo} - Placa: #{itens.placa}" />
+                                                </p:column>
+
+                                            </p:pickList>
+
+                                            <br/>
+                                            <br/>
+                                            <p:outputLabel for="medicos" value="Selecionar médico(s):"/>
+                                            <br/>
+                                            <br/>
+
+                                            <p:pickList id="medicos" value="#{atendimentoMB.dualListMedicos}" var="itens" itemLabel="#{itens}" itemValue="#{itens}"
+                                                        converter="pickListUsuariosConverter" required="#{atendimentoMB.medicosTarget.size() eq 0}" requiredMessage="Selecione o(s) médico(s).">
+
+                                                <f:facet name="sourceCaption">Disponíveis</f:facet>
+                                                <f:facet name="targetCaption">Selecionados</f:facet>
+
+                                                <p:column>
+                                                    <h:outputText value="#{itens.nome}" />
+                                                </p:column>
+
+                                            </p:pickList>
+                                            <br/>
+                                            <h:panelGrid columns="2" styleClass="formulario">
+                                                <p:commandButton ajax="false" value="Concluir" actionListener="#{atendimentoMB.adicionar}"/>
+                                                <p:commandButton ajax="false" value="Cancelar" actionListener="#{atendimentoMB.cancelar}" immediate="true"/>
+                                            </h:panelGrid>
+                                        </h:panelGroup>
+                                    </p:tab>
+                                </p:tabView> 
+                            </div>
+                        </fieldset>
+                    </h:panelGroup>
+                </h:form>
+            </ui:define>
+            <ui:define name="bottom"></ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./WEB-INF/template/template.xhtml">
+
+            <ui:define name="top">
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('#usuario').addClass('on');
+                    });
+                </script>
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="form">
+                    <fieldset class="fieldset-content scroll-vertical">
+                        <legend style="padding: 5px;">
+                            <font face="arial" size="2" >Usuário</font>
+                        </legend>
+                        <p>
+                            <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+                        </p>
+                        <div class="bg">
+                            <div class="bg-top">
+                                <br/><br/>
+                            </div>
+                            <center>
+                                <br/>
+                                <h:panelGrid columns="4" styleClass="formulario  " rendered="#{usuarioFuncionarioMB.rendFiltro}">
+                                    <p:outputLabel for="filtro-nome" value="Nome: "/>
+                                    <p:inputText id="filtro-nome" maxlength="60" size="30" value="#{usuarioFuncionarioMB.objUsuarioFuncionario.nome}"/>
+                                    <p:commandButton ajax="false" value="Filtrar" actionListener="#{usuarioFuncionarioMB.filtrarPesquisa}"/>
+                                    <p:commandButton value="Todos" ajax="false" actionListener="#{usuarioFuncionarioMB.consultar}"/>
+                                </h:panelGrid>
+                                <br/>
+                            </center>
+                            <h:panelGrid styleClass="  form_cadastro" rendered="#{usuarioFuncionarioMB.rendFormulario}">
+
+                                <br/><br/>
+                                <h:panelGrid columns="2" styleClass="formulario posicao-form">
+
+                                    <p:outputLabel for="nome" value="Nome:"/>
+                                    <p:inputText id="nome" maxlength="60" size="35" value="#{usuarioFuncionarioMB.objUsuarioFuncionario.nome}" required="true" requiredMessage="Informe o nome."/>
+
+                                    <p:outputLabel for="usuario" value="Usuário: "/>
+                                    <p:inputText id="usuario" maxlength="30" value="#{usuarioFuncionarioMB.objUsuarioFuncionario.usuario}" required="true" requiredMessage="Informe o usuário."/>
+
+                                    <p:outputLabel for="senha" value="Senha:"/>
+                                    <p:password id="senha" maxlength="32" size="15" value="#{usuarioFuncionarioMB.objUsuarioFuncionario.senha}" required="true" requiredMessage="Informe a senha." rendered="#{usuarioFuncionarioMB.objUsuarioFuncionario.senha ne ''}"/>
+                                    <p:outputLabel value="Informação indisponível" rendered="#{usuarioFuncionarioMB.objUsuarioFuncionario.senha eq ''}"/>
+
+                                    <p:outputLabel for="cpf" value="Cpf:"/>
+                                    <p:inputMask mask="999.999.999-99" id="cpf" size="15" value="#{usuarioFuncionarioMB.objUsuarioFuncionario.cpf}" required="true" requiredMessage="Informe o cpf."/>
+
+                                    <p:outputLabel for="status" value="Status:"/>
+                                    <h:selectOneMenu styleClass="ui-selectonemenu-label ui-inputfield ui-corner-all"  id="status" value="#{usuarioFuncionarioMB.objUsuarioFuncionario.situacao}" required="true" requiredMessage="Selecione o status.">
+                                        <f:selectItem itemLabel="-- selecione -- " itemValue=""/>
+                                        <f:selectItem itemLabel="Ativo" itemValue="1"/>
+                                        <f:selectItem itemLabel="Inativo" itemValue="0"/>
+                                    </h:selectOneMenu>
+
+                                    <p:outputLabel for="skype" value="Skype:"/>
+                                    <p:inputText  id="skype" size="12" value="#{usuarioFuncionarioMB.objUsuarioFuncionario.skype}" required="true" requiredMessage="Informe o skype."/>
+
+                                    <p:outputLabel for="email" value="E-mail:"/>
+                                    <p:inputText id="email" maxlength="60" size="35" value="#{usuarioFuncionarioMB.objUsuarioFuncionario.email}" required="true" requiredMessage="Informe o e-mail."/>
+
+                                    <p:outputLabel for="perfil" value="Perfil:"/>
+                                    <h:selectOneMenu styleClass="ui-selectonemenu-label ui-inputfield ui-corner-all" id="perfil" value="#{usuarioFuncionarioMB.objUsuarioFuncionario.perfilIdPerfil}" required="true" requiredMessage="Selecione o perfil.">
+                                        <f:selectItem itemLabel="-- selecione -- " itemValue=""/>
+                                        <f:selectItems value="#{usuarioFuncionarioMB.itensPerfil}"/>
+                                    </h:selectOneMenu>
+
+                                </h:panelGrid>
+                            </h:panelGrid>
+                            <p:dataTable var="item" value="#{usuarioFuncionarioMB.objListaFuncionarios}"
+                                         emptyMessage="Nenhum registro encontrado."
+                                         paginator="true" rows="10"
+                                         rowsPerPageTemplate="5,10,15" rendered="#{usuarioFuncionarioMB.rendGrid}">
+
+                                <p:column headerText="Nome" sortBy="#{item.nome}" style="white-space: normal;">
+                                    <h:outputLabel value="#{item.nome}"/>
+                                </p:column>
+
+                                <p:column headerText="Usuário" sortBy="#{item.usuario}">
+                                    <h:outputLabel value="#{item.usuario}"/>
+                                </p:column>
+
+                                <p:column headerText="Situação" width="5">
+                                    <center>
+                                        <h:outputLabel value="Inativo" rendered="#{item.situacao == 0}"/>
+                                        <h:outputLabel value="Ativo" rendered="#{item.situacao == 1}"/>
+                                    </center>
+                                </p:column>
+
+                                <p:column headerText="Skype" width="5">
+                                    <center>
+                                        <a href="#{item.skype}">
+                                            <h:graphicImage value="/img/skype.png" alt="Skype" title="Skype"/>
+                                        </a>
+                                    </center>
+                                </p:column>
+
+                                <p:column headerText="Redefinir senha" width="5">
+                                    <center>
+                                        <p:commandLink ajax="true" update="@form" oncomplete="altsenha.show()"> 
+                                            <h:graphicImage value="/img/atualizar_senha.png" alt="Alterar senha" title="Alterar senha"/>
+                                            <f:setPropertyActionListener value="#{item}" target="#{usuarioFuncionarioMB.objUsuarioFuncionario}"/>
+                                        </p:commandLink>
+                                    </center>
+                                </p:column>
+
+                                <p:column headerText="Visualizar" width="5">
+                                    <center>
+                                        <p:commandLink ajax="true" update="@form" oncomplete="dlg.show()" >
+                                            <p:graphicImage value="/img/visualizar.png" title="Visualizar" alt="Visualizar"/>
+                                            <f:setPropertyActionListener value="#{item}" target="#{usuarioFuncionarioMB.objUsuarioFuncionario}"/>
+                                        </p:commandLink>
+                                    </center>
+                                </p:column>
+
+                                <p:column headerText="Editar" width="5">
+                                    <center>
+                                        <h:commandLink action="#{usuarioFuncionarioMB.editar}">
+                                            <h:graphicImage value="/img/editar.png" title="Editar" alt="Editar"/>
+                                            <f:setPropertyActionListener value="#{item}" target="#{usuarioFuncionarioMB.objUsuarioFuncionario}"/>
+                                        </h:commandLink>
+                                    </center>
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <br/>
+                            <h:panelGroup styleClass="formulario btn">
+                                <p:commandButton ajax="false" value="Novo" actionListener="#{usuarioFuncionarioMB.novo}" rendered="#{usuarioFuncionarioMB.rendBtnNovo}"/>
+                                <p:commandButton ajax="false" value="Adicionar" actionListener="#{usuarioFuncionarioMB.adicionar}" rendered="#{usuarioFuncionarioMB.rendBtnAdicionar}"/>
+                                <p:commandButton ajax="false" value="Atualizar" actionListener="#{usuarioFuncionarioMB.atualizar}" rendered="#{usuarioFuncionarioMB.rendBtnAtualizar}"/>
+                                <p:commandButton ajax="false" value="Limpar" update="form" process="@this" immediate="true" rendered="#{usuarioFuncionarioMB.rendBtnLimpar}">
+                                    <p:resetInput target="form"/>
+                                </p:commandButton>
+                                <p:commandButton ajax="false" value="Voltar" actionListener="#{usuarioFuncionarioMB.voltar}" rendered="#{usuarioFuncionarioMB.rendBtnVoltar}" immediate="true"/>
+                            </h:panelGroup>
+                            <br/><br/>
+                        </div>
+                    </fieldset>
+                    <!-- Visualizar todas as informações do usuário -->
+                    <p:dialog id="basicDialog" hideEffect="drop" header="Usuário" widgetVar="dlg" modal="true" resizable="false">
+                        <h:panelGrid columns="2" styleClass="formulario">
+
+                            <p:outputLabel value="Nome:"/>
+                            <p:outputLabel value="#{usuarioFuncionarioMB.objUsuarioFuncionario.nome}"/>
+
+                            <p:outputLabel value="Usuário: "/>
+                            <p:outputLabel value="#{usuarioFuncionarioMB.objUsuarioFuncionario.usuario}"/>
+
+                            <p:outputLabel value="Cpf:"/>
+                            <h:outputText converter="cpfConverter" value="#{usuarioFuncionarioMB.objUsuarioFuncionario.cpf}"/>
+
+                            <p:outputLabel value="Situação:"/>
+                            <p:outputLabel value="Ativo" rendered="#{usuarioFuncionarioMB.objUsuarioFuncionario.situacao == 1}"/>
+                            <p:outputLabel value="Inativo" rendered="#{usuarioFuncionarioMB.objUsuarioFuncionario.situacao == 0}"/>
+
+                            <p:outputLabel value="E-mail:"/>
+                            <p:outputLabel value="#{usuarioFuncionarioMB.objUsuarioFuncionario.email}"/>
+
+                            <p:outputLabel value="Perfil:"/>
+                            <p:outputLabel value="#{usuarioFuncionarioMB.objUsuarioFuncionario.objPerfil.nome}"/>
+
+                        </h:panelGrid>
+                    </p:dialog>
+
+                    <!-- Exibe para alterar a senha -->
+                    <p:dialog id="alterSenha" hideEffect="drop" header="Alterar senha" widgetVar="altsenha" modal="true" resizable="false">
+                        <h:panelGrid columns="2" styleClass="formulario">
+
+                            <p:outputLabel value="Usuário:"/>
+                            <p:outputLabel value="#{usuarioFuncionarioMB.objUsuarioFuncionario.nome}"/>
+
+                            <p:outputLabel value="Informe a senha*:"/>
+                            <p:password value="#{usuarioFuncionarioMB.objUsuarioFuncionario.senha}"/>
+
+                            <p:outputLabel value="Repetir a senha*:"/>
+                            <p:password value="#{usuarioFuncionarioMB.objUsuarioFuncionario.repetirSenha}"/>
+
+                        </h:panelGrid>
+                        <br/>
+                        <center>
+                                <p:commandButton ajax="false" value="Atualizar" actionListener="#{usuarioFuncionarioMB.redefinirSenha}"/>
+                        </center>
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+            <ui:define name="bottom">
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

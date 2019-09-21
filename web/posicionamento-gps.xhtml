@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+        <ui:composition template="./WEB-INF/template/template.xhtml">
+            <ui:define name="top">
+                <!--GEOPOSICIONAMENTO-->
+                <meta name="viewport" content="initial-scale=1.0, user-scalable=no"></meta>
+                <script src="https://maps.googleapis.com/maps/api/js?v=3exp&amp;sensor=true"></script>
+                <script language="javascript" type="text/javascript" src="#{request.contextPath}/resources/js/posicionamento-gps.js" charset="utf-8"/>
+                <script>
+                    $(document).ready(function () {
+                        $('#posicionamento-gps').addClass('on');
+                        map = new google.maps.Map(document.getElementById('map-canvas'),
+                                mapOptions);
+                    });
+                </script>
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="form" prependId="false">
+                    <h:inputHidden id="input-posicao" value="#{posicionamentoGpsMB.posicionamento}" />
+                    <p:commandButton ajax="true" style="display: none;" onclick="initialize()" id="botao-salvar" action="#{posicionamentoGpsMB.adicionarPosicao}"/>
+
+                    <fieldset class="fieldset-content scroll-vertical">
+                        <legend style="padding: 5px;">
+                            <font face="arial" size="2" >Posicionamento GPS </font>
+                        </legend>
+                        <p:poll interval="3" update="get-posicao"/>
+                        <p:dataTable style="display: none" id="get-posicao" value="#{posicionamentoGpsMB.objListaPosicao}" var="item">
+                            <p:column headerText="posicionamento">
+                                <h:outputText value="#{item.posicionamento}" styleClass="get-posicao"/>
+                            </p:column>
+                        </p:dataTable>
+                        <div class="bg">
+                            <div class="bg-top">
+                                <br/><br/>
+                            </div>
+                            <div id="map-canvas"></div>
+                        </div>
+                    </fieldset>
+                </h:form>
+            </ui:define>
+            <ui:define name="bottom"></ui:define>
+        </ui:composition>
+    </body>
+</html>

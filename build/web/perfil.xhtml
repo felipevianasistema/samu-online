@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./WEB-INF/template/template.xhtml">
+
+            <ui:define name="top">
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('#perfil').addClass('on');
+                    });
+                </script>
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="form">
+                    <fieldset class="fieldset-content scroll-vertical">
+                        <legend style="padding: 5px;">
+                            <font face="arial" size="2" >Perfil</font>
+                        </legend>
+
+                        <p><p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/></p>
+                        <div class="bg">
+                            <div class="bg-top">
+                                <br/><br/>
+                            </div>
+                            <center>
+                                <br/>
+                                <h:panelGrid columns="4" styleClass="formulario  " rendered="#{perfilMB.rendFiltro}">
+                                    <p:outputLabel for="filtro-nome" value="Nome:"/>
+                                    <p:inputText id="filtro-nome" maxlength="35" value="#{perfilMB.objPerfil.nome}"/>
+                                    <p:commandButton ajax="false" value="Filtrar" actionListener="#{perfilMB.filtrarPesquisa}"/>
+                                    <p:commandButton ajax="false" value="Todos" actionListener="#{perfilMB.consultar}"/>
+                                </h:panelGrid>
+
+                            </center>
+
+                            <h:panelGrid class=" form_cadastro" rendered="#{perfilMB.rendFormulario}">
+
+                                <br/><br/>
+                                <h:panelGrid columns="2" styleClass="formulario posicao-form">
+
+                                    <p:outputLabel for="nome" value="Nome:"/>
+                                    <p:inputText id="nome" maxlength="35" size="41" value="#{perfilMB.objPerfil.nome}" required="true" requiredMessage="Informe o nome."/>
+
+                                    <p:outputLabel for="descricao" value="Descrição:"/>
+                                    <p:inputTextarea cols="41" rows="6" counter="counter" counterTemplate="{0} caracteres restante(s)." maxlength="200" id="descricao" value="#{perfilMB.objPerfil.descricao}" required="true" requiredMessage="Informe a descrição."/>
+
+                                    <p:outputLabel value=""/>
+                                    <p:outputLabel id="counter" />  
+
+                                </h:panelGrid>
+                            </h:panelGrid>
+                            <br/>
+                            <p:dataTable var="item" value="#{perfilMB.objListaPerfil}"
+                                         emptyMessage="Nenhum registro encontrado."
+                                         paginator="true" rows="10"  
+                                         rowsPerPageTemplate="5,10,15" rendered="#{perfilMB.rendGrid}">
+
+                                <p:column headerText="Nome" sortBy="#{item.nome}">
+                                    <p:outputLabel value="#{item.nome}"/>
+                                </p:column>
+
+                                <p:column headerText="Descrição" sortBy="#{item.descricao}" style="white-space: normal;">
+                                    <p:outputLabel value="#{item.descricao}"/>
+                                </p:column>
+
+                                <p:column headerText="Visualizar" width="5">
+                                    <center>
+                                        <p:commandLink ajax="true" update="@form" oncomplete="dlg.show()">
+                                            <p:graphicImage alt="Visualizar" value="/img/visualizar.png" title="Visualizar"></p:graphicImage>
+                                            <f:setPropertyActionListener value="#{item}" target="#{perfilMB.objPerfil}"/>
+                                        </p:commandLink>
+                                    </center>
+                                </p:column>
+
+                                <p:column headerText="Editar" width="5">
+                                    <center>
+                                        <h:commandLink action="#{perfilMB.editar}">
+                                            <p:graphicImage alt="Editar" value="/img/editar.png" title="Editar"></p:graphicImage>
+                                            <f:setPropertyActionListener value="#{item}" target="#{perfilMB.objPerfil}"/>
+                                        </h:commandLink>
+                                    </center>
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <!-- tabela de recursos -->
+                            <p:dataTable var="item" value="#{perfilMB.objRecursoDataModel}"
+                                         selection="#{perfilMB.objPerfil.arrayRecursos}" rendered="#{perfilMB.rendFormulario}">
+
+                                <f:facet name="header">  
+                                    Selecione os recursos do perfil 
+                                </f:facet>  
+
+                                <p:column selectionMode="multiple" style="width:1%" />
+
+                                <p:column headerText="Descrição">
+                                    <p:outputLabel value="#{item.descricao}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                            <br/>
+                            <h:panelGroup styleClass="formulario btn">
+                                <p:commandButton ajax="false" value="Novo" actionListener="#{perfilMB.novo}" rendered="#{perfilMB.rendBtnNovo}"/>
+                                <p:commandButton ajax="false" value="Adicionar" actionListener="#{perfilMB.adicionar}" rendered="#{perfilMB.rendBtnAdicionar}"/>
+                                <p:commandButton ajax="false" value="Atualizar" actionListener="#{perfilMB.atualizar}" rendered="#{perfilMB.rendBtnAtualizar}"/>
+                                <p:commandButton ajax="false" value="Limpar" update="form" process="@this" rendered="#{perfilMB.rendBtnLimpar}" immediate="true">
+                                    <p:resetInput target="form"/>
+                                </p:commandButton>
+                                <p:commandButton ajax="false" value="Voltar" actionListener="#{perfilMB.voltar}" rendered="#{perfilMB.rendBtnVoltar}" immediate="true"/>                        
+                            </h:panelGroup>
+                            <br/><br/>
+                        </div>
+                    </fieldset>
+
+                    <p:dialog id="dlg" hideEffect="drop" header="Perfil" widgetVar="dlg" modal="true" resizable="false">
+
+                        <h:panelGrid columns="2" styleClass="formulario">
+
+                            <p:outputLabel value="Nome:"/>
+                            <p:outputLabel value="#{perfilMB.objPerfil.nome}"/>
+
+                            <p:outputLabel value="Descrição:"/>
+                            <p:inputTextarea cols="41" rows="6" value="#{perfilMB.objPerfil.descricao}" disabled="true"/>
+
+                        </h:panelGrid>
+  
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+            <ui:define name="bottom">
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

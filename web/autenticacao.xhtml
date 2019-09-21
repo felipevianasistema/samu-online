@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./WEB-INF/template/template-autenticacao.xhtml">
+
+            <ui:define name="top">
+            </ui:define>
+
+            <ui:define name="left">
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="form" styleClass="formulario">
+                    <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+                    <div id="div-contents-index-autenticacao">                    
+                        <div>
+                            <div style="float: left; margin: 50px 28px 0px;">
+                                <div>
+                                    <h:graphicImage value="img/ambulancia.png"/>
+                                </div>
+                                <div style="float: right; margin: -211px -171px;">
+                                    <h:graphicImage width="262" height="178" value="img/motosamu.png"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div align="right" style="float: right; margin-top: 21px; margin-right: 24px;"  >
+                            <div class="bg">
+                                <div class="bg-top">
+                                    <br/><br/>
+                                </div>
+                                <br/>
+
+                                <font style="margin-right: 9px;">Autentique-se</font>
+                                <br/>
+
+                                <h:panelGrid columns="2" class="formulario">
+                                    <h:outputLabel for="usuario" value="Usuário:"/>
+                                    <p:inputText id="usuario" size="28" maxlength="30" value="#{autenticacaoMB.objLoginFuncionario.usuario}" required="true" requiredMessage="Informe o usuário."/>
+
+                                    <h:outputLabel for="senha" value="Senha:"/>
+                                    <p:password id="senha" size="28" maxlength="32" value="#{autenticacaoMB.objLoginFuncionario.senha}" required="true" requiredMessage="Informe a senha."/>
+
+                                </h:panelGrid>
+                                <div align="right">
+                                    <br/>
+                                    <h:panelGrid columns="2">
+                                        <p:commandButton value="Entrar" ajax="false" action="#{autenticacaoMB.autenticar}"/>
+                                        <p:commandButton value="Limpar" ajax="false" immediate="true" update="form" process="@this">
+                                            <p:resetInput target="form"/>
+                                        </p:commandButton>
+                                    </h:panelGrid>
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <br/>
+                        <br/>
+                        <h:panelGrid columns="4" width="100%">
+                            <h:commandLink action="#">
+                                <h:graphicImage style="border: 0px;" id="image-sus" onmouseover="this.src = 'img/sus_1.png'" onmouseout="this.src = 'img/sus_0.png'" value="img/sus_0.png"/>
+                            </h:commandLink>
+
+                            <h:commandLink action="#">
+                                <h:graphicImage style="border: 0px;" id="imagem-ministerio_saude" onmouseover="this.src = 'img/ministeriosaude_1.png'" onmouseout="this.src = 'img/ministeriosaude_0.png'"  value="img/ministeriosaude_0.png"/>
+                            </h:commandLink>
+
+                            <h:commandLink action="#">
+                                <h:graphicImage style="border: 0px;" onmouseover="this.src = 'img/governo_federal_1.png'" onmouseout="this.src = 'img/governo_federal_0.png'" value="img/governo_federal_0.png"/>
+                            </h:commandLink>
+
+                            <center>
+                                <font>
+                                    <i>
+                                        A nossa missão é cuidar de forma integral o cidadão sergipano,
+                                        <br/>
+                                        assegurando seus direitos e respeitando as diversidades.
+                                    </i>
+                                </font>
+                            </center>
+                        </h:panelGrid>
+                    </div>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="bottom">
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

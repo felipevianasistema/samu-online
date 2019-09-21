@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config version="2.1"
+              xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+       
+    <!-- Executa a classe Autorização a cada requisição -->
+    <lifecycle>
+        <phase-listener>br.com.samuonline.listener.Autorizacao</phase-listener>
+    </lifecycle>
+    
+    <!-- classe autorização -->
+    <navigation-rule>
+        <from-view-id>/*</from-view-id>
+        <navigation-case>
+            <from-outcome>autenticacaoPage</from-outcome>
+            <to-view-id>/autenticacao.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <converter>
+        <converter-id>cpfConverter</converter-id>
+        <converter-class>br.com.samuonline.converter.CpfConverter</converter-class>
+    </converter>
+</faces-config>

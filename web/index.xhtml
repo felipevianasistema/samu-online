@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./WEB-INF/template/template.xhtml">
+
+            <ui:define name="top">
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('#pagina-inicial').addClass('on');
+                    });
+                </script>
+
+            </ui:define>
+
+            <ui:define name="content">
+
+                <fieldset class="fieldset-content scroll-vertical">
+                    <legend style="padding: 5px;">
+                        <font face="arial" size="2" >
+                            Página Inicial
+                        </font> 
+                    </legend>
+                    <div class="bg">
+                        <div class="bg-top">
+                            <br/><br/>
+                        </div>
+                        <!-- Este componente invisível é uma solução para um bug no componente galleria -->
+                        <p:tab rendered="false">
+                            <p:tabView></p:tabView>
+                        </p:tab>
+                        <br/>
+                        <div>
+                            <p:galleria style="margin: 0 auto;" value="#{indexMB.objListaImagens}" var="imagem" panelWidth="500" panelHeight="180" showCaption="true">  
+                                <p:graphicImage value="#{imagem}" alt="Samu Online" title="Colaboradores do SAMU"/>  
+                            </p:galleria> 
+                        </div>
+                        <font face="arial" size="2" style="color: white !important;">
+                            <center><u>Serviço de Atendimento Móvel de Urgência</u></center>
+                        </font>
+                        <p align="justify" style="margin: 13px; background-color: #f7f7f7; padding: 8px;">
+                            <font face="arial" size="2" style="color: #696969 !important;">
+                                O Ministério da Saúde, através da Portaria nº 1864/GM , em setembro de 2003, iniciou a implantação do componente móvel de urgência com a criação do Serviço de Atendimento Móvel de Urgência, SAMU-192.
+                                O SAMU - Serviço de Atendimento Móvel de Urgência é um serviço de saúde, desenvolvido pela Secretaria de Estado da Saúde de Santa Catarina, em parceria com o Ministério da Saúde e as Secretarias Municipais de Saúde do Estado de Santa Catarina organizadas macrorregionalmente.
+                                É responsável pelo componente Regulação dos Atendimentos de Urgência, pelo Atendimento Móvel de Urgência da Região e pelas transferências de pacientes graves da região. 
+                                Faz parte do sistema regionalizado e hierarquizado, capaz de atender, dentro da região de abrangência, todo enfermo, ferido ou parturiente em situação de urgência ou emergência, e transportá-nos com segurança e acompanhamento de profissionais da saúde até o nível hospitalar do sistema. 
+                                Além disto intermedia, através da central de regulação médica das urgências, as transferências inter-hospitalares de pacientes graves, promovendo a ativação das equipes apropriadas e a transferência do paciente.
+                            </font>
+                        </p>
+                    </div>
+                </fieldset>
+            </ui:define>
+            <ui:define name="bottom">
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

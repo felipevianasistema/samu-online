@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./WEB-INF/template/template.xhtml">
+            <ui:define name="top">
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('#registro-ponto').addClass("on");
+                    });
+                </script>
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="form" prependId="false">
+                    <fieldset class="fieldset-content scroll-vertical">
+                        <legend style="padding: 5px;">  
+                            <font face="arial" size="2" >
+                                Registro de ponto
+                            </font>
+                        </legend>
+                        <p><p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/></p>
+                        <div class="bg">
+                            <div class="bg-top">
+                                <br/><br/>
+                            </div>
+                            <center>
+                                <br/>
+                                <h:panelGrid columns="4" styleClass="formulario  " rendered="#{registroPontoMB.rendFiltro}">
+                                    <h:outputText value="Selecione o mês: "/>
+                                    <p:selectOneMenu value="#{registroPontoMB.objRegistroPonto.dataFiltro}">
+                                        <f:selectItem itemLabel="Janeiro" itemValue="01"/>
+                                        <f:selectItem itemLabel="Fevereiro" itemValue="02"/>
+                                        <f:selectItem itemLabel="Março" itemValue="03"/>
+                                        <f:selectItem itemLabel="Abril" itemValue="04"/>
+                                        <f:selectItem itemLabel="Maio" itemValue="05"/>
+                                        <f:selectItem itemLabel="Junho" itemValue="06"/>
+                                        <f:selectItem itemLabel="Julho" itemValue="07"/>
+                                        <f:selectItem itemLabel="Agosto" itemValue="08"/>
+                                        <f:selectItem itemLabel="Setembro" itemValue="09"/>
+                                        <f:selectItem itemLabel="Outubro" itemValue="10"/>
+                                        <f:selectItem itemLabel="Novembro" itemValue="11"/>
+                                        <f:selectItem itemLabel="Dezembro" itemValue="12"/>
+                                    </p:selectOneMenu>
+                                    <p:commandButton ajax="false" value="Filtrar" actionListener="#{registroPontoMB.filtrarPesquisa}"/>
+                                    <p:commandButton ajax="false" value="Todos" actionListener="#{registroPontoMB.consultar}"/>
+                                </h:panelGrid>
+                            </center>
+                            <h:panelGrid styleClass="form_cadastro" rendered="#{registroPontoMB.rendFormulario}">
+                                <br/><br/>
+                                <h:panelGrid columns="2" styleClass="formulario posicao-form">
+                                    
+                                    <p:outputLabel id="campobase-0" value="Base:"/>
+                                    <p:selectOneMenu id="campobase-1" value="#{registroPontoMB.objRegistroPonto.objBase.idBase}" required="true" requiredMessage="Selecione a base.">
+                                        <f:selectItem itemLabel="-- selecione --" itemValue=""/>
+                                        <f:selectItems value="#{registroPontoMB.itensBase}"/>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel for="entrada-saida" value="Entrada/saída:"/>
+                                    <p:selectOneRadio id="entrada-saida" value="#{registroPontoMB.objRegistroPonto.entradaSaida}" required="true" requiredMessage="Selecione a entrada/saída.">
+                                        <f:selectItem itemLabel="Entrada" itemValue="E"/>
+                                        <f:selectItem itemLabel="Saída" itemValue="S"/>
+                                    </p:selectOneRadio>
+
+                                </h:panelGrid>
+                            </h:panelGrid>
+
+                            <br/>
+                            <p:dataTable var="item" value="#{registroPontoMB.listaRegistroPonto}"
+                                         emptyMessage="Nenhum registro encontrado."
+                                         paginator="true" rows="10"  
+                                         rowsPerPageTemplate="5,10,15" rendered="#{registroPontoMB.rendGrid}">
+
+                                <p:column headerText="Funcionário">
+                                    <center>
+                                        <h:outputText value="#{item.objUsuarioFuncionario.nome}"/>
+                                    </center>
+                                </p:column>
+
+                                <p:column headerText="Base">
+                                    <center>
+                                        <h:outputText value="#{item.objBase.nome}"/>
+                                    </center>
+                                </p:column>
+
+                                <p:column headerText="Data/Hora registro">
+                                    <center>
+                                        <h:outputText value="#{item.dataHoraRegistro}">
+                                            <f:convertDateTime timeZone="GMT-03:00" pattern="dd/MM/yyyy - HH:mm:ss"/>
+                                        </h:outputText>
+                                    </center>
+                                </p:column>
+                                
+                                 <p:column headerText="Entrada">
+                                    <center>
+                                        <h:outputText value="Entrada" rendered="#{item.entradaSaida eq 69}"/>
+                                    </center>
+                                </p:column>
+                                
+                                <p:column headerText="Saída">
+                                    <center>
+                                        <h:outputText value="Saída" rendered="#{item.entradaSaida eq 83}"/>
+                                    </center>
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <br/>
+                            <h:panelGroup styleClass="formulario btn">
+                                <p:commandButton ajax="false" value="Novo" actionListener="#{registroPontoMB.novo}" rendered="#{registroPontoMB.rendBtnNovo}"/>
+                                <p:commandButton ajax="false" value="Adicionar" actionListener="#{registroPontoMB.adicionar}" rendered="#{registroPontoMB.rendBtnAdicionar}"/>
+                                <p:commandButton ajax="false" value="Limpar" update="form" process="@this" rendered="#{registroPontoMB.rendBtnLimpar}" immediate="true">
+                                    <p:resetInput target="form"/>
+                                </p:commandButton>
+                                <p:commandButton ajax="false" value="Voltar" actionListener="#{registroPontoMB.voltar}" rendered="#{registroPontoMB.rendBtnVoltar}" immediate="true"/>                        
+                            </h:panelGroup>
+                            <br/><br/>
+                        </div>
+                    </fieldset>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="bottom">
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

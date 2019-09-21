@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./WEB-INF/template/template.xhtml">
+
+            <ui:define name="top">
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('#viatura').addClass('on');
+                    });
+                </script>
+
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="form">
+                    <fieldset class="fieldset-content scroll-vertical">
+                        <legend style="padding: 5px;">
+                            <font face="arial" size="2">Viatura </font>
+                        </legend>
+                        <div class="bg">
+                            <div class="bg-top">
+                                <br/><br/>
+                            </div>
+                            <p><p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/></p>
+
+                            <center>
+                                <br/>
+                                <h:panelGrid columns="4" styleClass="formulario  " rendered="#{viaturaMB.rendFiltro}">
+                                    <p:outputLabel for="filtro-codigo" value="Código:"/>
+                                    <p:inputMask mask="?99999" maxlength="5" size="5" id="filtro-codigo" value="#{viaturaMB.objViatura.codigo}">
+                                        <f:convertNumber ></f:convertNumber>
+                                    </p:inputMask>
+                                    <p:commandButton ajax="false" value="Filtrar" actionListener="#{viaturaMB.filtrarPesquisa}"/>
+                                    <p:commandButton ajax="false" value="Todos" actionListener="#{viaturaMB.consultar}"/>
+                                </h:panelGrid>
+                                <br/>
+                            </center>
+                            <h:panelGrid styleClass="  form_cadastro" rendered="#{viaturaMB.rendFormulario}">
+                                <h:panelGrid columns="2" styleClass="formulario posicao-form">
+
+                                    <p:outputLabel for="codigo" value="Código:"/>
+                                    <p:inputMask mask="?99999" id="codigo" size="4" value="#{viaturaMB.objViatura.codigo}" required="true" requiredMessage="Informe o código."/>
+
+                                    <p:outputLabel for="placa" value="Placa:"/>
+                                    <p:inputMask id="placa" maxlength="8" size="7" mask="a**-9999" value="#{viaturaMB.objViatura.placa}" required="true" requiredMessage="Inform a placa."/>
+
+                                    <p:outputLabel for="modelo" value="Modelo:"/>
+                                    <p:inputText id="modelo" maxlength="40" value="#{viaturaMB.objViatura.modelo}" required="true" requiredMessage="Informe o modelo."/>
+
+                                    <p:outputLabel for="skype" value="Skype:"/>
+                                    <p:inputMask id="skype" mask="a**-9999" size="7" value="#{viaturaMB.objViatura.skype}" required="true" requiredMessage="Informe o skype."/>
+
+                                    <p:outputLabel for="tipoviatura" value="Tipo da viatura:"/>
+                                    <h:selectOneMenu styleClass="ui-selectonemenu-label ui-inputfield ui-corner-all" id="tipoviatura" value="#{viaturaMB.objViatura.tipoViatura}" required="true" requiredMessage="Selecione o tipo da viatura.">
+                                        <f:selectItem itemLabel="-- selecione --" itemValue=""/>
+                                        <f:selectItem itemLabel="USB" itemValue="USB"/>
+                                        <f:selectItem itemLabel="USA" itemValue="USA"/>
+                                    </h:selectOneMenu>
+
+                                    <p:outputLabel for="base" value="Base:"/>
+                                    <h:selectOneMenu id="base" styleClass="ui-selectonemenu-label ui-inputfield ui-corner-all" value="#{viaturaMB.objViatura.objBase.idBase}" required="true" requiredMessage="Selecione a base">
+                                        <f:selectItem itemLabel="-- selecione --" itemValue=""/>
+                                        <f:selectItems value="#{viaturaMB.itensBase}"/>
+                                    </h:selectOneMenu>
+
+                                </h:panelGrid>
+                            </h:panelGrid>
+
+                            <p:dataTable var="item" value="#{viaturaMB.objListaViatura}"
+                                         emptyMessage="Nenhum registro encontrado."
+                                         paginator="true" rows="10"  
+                                         rowsPerPageTemplate="5,10,15" rendered="#{viaturaMB.rendGrid}">
+
+                                <p:column headerText="Código" width="6" sortBy="#{item.codigo}">
+                                    <center>
+                                        <h:outputLabel value="#{item.codigo}"/>
+                                    </center>
+                                </p:column>
+
+                                <p:column headerText="Modelo" width="9" sortBy="#{item.modelo}">
+                                    <center>
+                                        <h:outputLabel value="#{item.modelo}"/>
+                                    </center>
+                                </p:column>
+
+                                <p:column headerText="Placa" width="8" sortBy="#{item.placa}">
+                                    <center>
+                                        <h:outputLabel value="#{item.placa}"/>
+                                    </center>
+                                </p:column>
+
+                                <p:column headerText="Tipo da viatura" width="6" sortBy="#{item.tipoViatura}">
+                                    <center>
+                                        <h:outputLabel value="#{item.tipoViatura}"/>
+                                    </center>
+                                </p:column>
+
+                                <p:column headerText="Skype" width="5">
+                                    <center>
+                                        <a href="#{item.skype}">
+                                            <h:graphicImage value="/img/skype.png" alt="Skype" title="Skype"/>
+                                        </a>
+                                    </center>
+                                </p:column>
+
+                                <p:column headerText="Visualizar" width="5">
+                                    <center>
+                                        <p:commandLink ajax="true" update="@form" oncomplete="dlgn.show();">
+                                            <p:graphicImage value="/img/visualizar.png" alt="Visualizar" title="Visualizar"/>
+                                            <f:setPropertyActionListener value="#{item}" target="#{viaturaMB.objViatura}"/>
+                                        </p:commandLink>
+                                    </center>
+                                </p:column>
+
+                                <p:column headerText="Editar" width="5" rendered="#{viaturaMB.usuarioSessao.perfilIdPerfil eq 1}">
+                                    <center>
+                                        <h:commandLink action="#{viaturaMB.editar}">
+                                            <h:graphicImage value="/img/editar.png" alt="Editar" title="Editar"/>
+                                            <f:setPropertyActionListener value="#{item}" target="#{viaturaMB.objViatura}"/>
+                                        </h:commandLink>
+                                    </center>
+                                </p:column>
+                            </p:dataTable>
+                            <br/>
+
+                            <h:panelGroup styleClass="formulario btn">
+                                <p:commandButton ajax="false" value="Novo" actionListener="#{viaturaMB.novo}" rendered="#{viaturaMB.rendBtnNovo and viaturaMB.usuarioSessao.perfilIdPerfil eq 1}"/>
+                                <p:commandButton ajax="false" value="Adicionar" actionListener="#{viaturaMB.adicionar}" rendered="#{viaturaMB.rendBtnAdicionar}"/>
+                                <p:commandButton ajax="false" value="Atualizar" actionListener="#{viaturaMB.atualizar}" rendered="#{viaturaMB.rendBtnAtualizar}"/>
+                                <p:commandButton ajax="false" value="Limpar" update="form" process="@this" rendered="#{viaturaMB.rendBtnLimpar}" immediate="true">
+                                    <p:resetInput target="form"/>
+                                </p:commandButton>
+                                <p:commandButton ajax="false" value="Voltar" actionListener="#{viaturaMB.voltar}" rendered="#{viaturaMB.rendBtnVoltar}" immediate="true"/>
+                            </h:panelGroup>
+                            <br/><br/>
+                        </div>
+                    </fieldset>
+
+                    <p:dialog id="dlg" hideEffect="drop" header="Viatura" widgetVar="dlgn" modal="true" resizable="false">
+                        <h:panelGrid columns="2" styleClass="formulario">
+
+                            <p:outputLabel value="Código:"/>
+                            <p:outputLabel value="#{viaturaMB.objViatura.codigo}"/>
+
+                            <p:outputLabel value="Placa:"/>
+                            <p:outputLabel value="#{viaturaMB.objViatura.placa}"/>
+
+                            <p:outputLabel value="Modelo:"/>
+                            <p:outputLabel value="#{viaturaMB.objViatura.modelo}"/>
+
+                            <p:outputLabel value="Tipo da viatura:"/>
+                            <p:outputLabel value="#{viaturaMB.objViatura.tipoViatura}"/>
+
+                            <p:outputLabel value="Base:"/>
+                            <p:outputLabel value="#{viaturaMB.objViatura.objBase.codigo } - #{viaturaMB.objViatura.objBase.nome}"/>
+
+                        </h:panelGrid>
+
+                    </p:dialog>
+
+                </h:form>
+            </ui:define>
+            <ui:define name="bottom">
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

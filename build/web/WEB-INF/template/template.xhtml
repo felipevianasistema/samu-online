@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" class="#language ('lang.dir')" dir="#language ('lang.dir')" lang="$w3c_language_id">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+
+        <script type="text/javascript">
+
+            //<![CDATA[
+            if (typeof (jQuery) == "undefined") {
+                document.write('<' + 'script src="#{request.contextPath}/resources/js/jquery-1.10.2.js" type="text/javascript"><' + '/script>');
+            }
+            //]]>
+        </script>
+        <link href="#{request.contextPath}/resources/css/main.css" rel="stylesheet" type="text/css" />
+        <link href="#{request.contextPath}/resources/css/default.css" rel="stylesheet" type="text/css" />
+        <link href="#{request.contextPath}/resources/css/cssLayout.css" rel="stylesheet" type="text/css"/>
+        <link rel="icon" href='img/favicon.png' type="image/x-icon" />
+        <link rel="shortcut icon" href='img/favicon.ico' type="image/x-icon"/>   
+        <title>Samu Online</title>
+    </h:head>
+
+    <body>
+        <f:view encoding="ISO-8859-1" transient="true">
+            <div id="container" class="div-container">
+                <div id="top">
+                    <ui:insert name="top"></ui:insert>
+                    <!-- Topo -->
+                    <div id="header" class="div-header">
+                        <div style="padding: 6px;">
+                            <img src="img/marca_samu.png"/>
+                            <div class="topo">
+                                <hr size="7" class="line-topo1"/>	
+                                <div align="right" style="margin-top: 15px;">
+                                    <img src="img/marca.png"/> 
+                                </div>
+                            </div>
+                            <hr size="7" class="line-topo2"/>
+                        </div>
+                    </div>
+                </div>
+                <!-- conteúdo -->
+                <div id="content" class="left_content">
+                    <h:form>
+                        
+                        <table align="right"> 
+                            <tr>
+                                <td><b><font face="arial">Seja Bem-Vindo(a):</font></b></td>
+                                <td><font face="arial"><h:outputLabel value="#{autenticacaoMB.objLoginFuncionario.nome}"/></font></td>
+                                <td><b><font face="arial">Perfil:</font></b></td>
+                                <td width="149"><font face="arial"><p:outputLabel value="#{autenticacaoMB.objLoginFuncionario.objPerfil.nome}"/></font></td>
+                                <td>
+                                    <h:commandLink action="#{autenticacaoMB.encerrarSessao}">
+                                        <h:graphicImage value="/img/sair.png" alt="Sair" title="Sair"/>
+                                    </h:commandLink>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                    </h:form>
+                    <!-- menu left -->
+                    <div class="menu-container">
+                        <h:form>	  
+                            <div class="nav">
+                                <div class="settings">
+                                    <table>
+                                        <tr>
+                                            <td><img src="img/logo_menu.png"></img></td>
+                                            <td><font color="#E87716"><b> <font face="arial" size="2" style="color: white !important;">Menu</font></b></font></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="menu">
+                                <ul>
+                                    <h:panelGroup id="template-index">
+                                        <li id="pagina-inicial"><h:commandLink action="index?faces-redirect=true" value="Página Inicial"/></li>
+                                    </h:panelGroup>
+                                    <h:panelGroup id="template-mapa-ocorrencia">
+                                        <f:event listener="#{autenticacaoMB.hasPermissaoComponente}" type="preRenderComponent"></f:event>
+                                        <li id="mapa-ocorrencia"><h:commandLink action="mapa-ocorrencia?faces-redirect=true" value="Mapa de Ocorrência"/></li>
+                                    </h:panelGroup>
+                                    <h:panelGroup id="template-posicionamento-gps">
+                                        <f:event listener="#{autenticacaoMB.hasPermissaoComponente}" type="preRenderComponent"></f:event>
+                                        <li id="posicionamento-gps"><h:commandLink action="posicionamento-gps?faces-redirect=true" value="Posicionamento GPS"/></li>
+                                    </h:panelGroup>
+                                    <h:panelGroup id="template-viatura">
+                                        <f:event listener="#{autenticacaoMB.hasPermissaoComponente}" type="preRenderComponent"></f:event>
+                                        <li id="viatura"><h:commandLink action="viatura?faces-redirect=true" value="Viaturas"/></li>
+                                    </h:panelGroup>
+                                    <h:panelGroup id="template-funcionario">
+                                        <f:event listener="#{autenticacaoMB.hasPermissaoComponente}" type="preRenderComponent"></f:event>
+                                        <li id="funcionario"><h:commandLink action="funcionario?faces-redirect=true" value="Funcionários"/></li>
+                                    </h:panelGroup>
+                                    <h:panelGroup id="template-usuario">
+                                        <f:event listener="#{autenticacaoMB.hasPermissaoComponente}" type="preRenderComponent"></f:event>
+                                        <li id="usuario"><h:commandLink action="usuario?faces-redirect=true" value="Usuários"/></li>
+                                    </h:panelGroup>
+                                    <h:panelGroup id="template-perfil">
+                                        <f:event listener="#{autenticacaoMB.hasPermissaoComponente}" type="preRenderComponent"></f:event>
+                                        <li id="perfil"><h:commandLink action="perfil?faces-redirect=true" value="Perfil"/></li>
+                                    </h:panelGroup>
+                                    <h:panelGroup id="template-registro-ponto">
+                                        <f:event listener="#{autenticacaoMB.hasPermissaoComponente}" type="preRenderComponent"></f:event>
+                                        <li id="registro-ponto"><h:commandLink action="registro-ponto?faces-redirect=true" value="Registro de ponto"/></li>
+                                    </h:panelGroup>
+                                    <h:panelGroup id="template-base">
+                                        <f:event listener="#{autenticacaoMB.hasPermissaoComponente}" type="preRenderComponent"></f:event>
+                                        <li id="base"><h:commandLink action="base?faces-redirect=true" value="Bases"/></li>
+                                    </h:panelGroup>
+                                    <h:panelGroup id="template-atendimento">
+                                        <f:event listener="#{autenticacaoMB.hasPermissaoComponente}" type="preRenderComponent"></f:event>
+                                        <li id="atendimento"><h:commandLink action="atendimento?faces-redirect=true" value="Atendimento"/></li>
+                                    </h:panelGroup>
+                                    <h:panelGroup id="template-ficha-aph">
+                                        <f:event listener="#{autenticacaoMB.hasPermissaoComponente}" type="preRenderComponent"></f:event>
+                                        <li id="ficha-aph"><h:commandLink action="fichaaph?faces-redirect=true" value="Ficha APH"/></li>
+                                    </h:panelGroup>
+                                </ul>
+                            </div>
+                        </h:form>
+                    </div>
+                    <div class="menu-conteudo">
+                        <ui:insert name="content"></ui:insert>
+                        <br/>
+                        <div class="font-legend" style="width: 21%; margin-left: 11px; border-style: solid; border-radius: 3px; margin-top: -295px;">
+                            <div style="margin: auto;" class="nav">
+                                <br/>
+                                <center>
+                                    Últimos chamados
+                                </center>
+                            </div>
+                            <h:form>
+                                <p:poll interval="500" listener="#{autenticacaoMB.listarChamados}" update="data-table-atendimento" />
+                                <p:dataTable id="data-table-atendimento" var="item" value="#{autenticacaoMB.objListaAtendimento}"
+                                             emptyMessage="Não existe chamado registrado.">
+                                    <p:column headerText="Números">
+                                        <center>
+                                            <h:commandLink value="#{item.toString()}" action="#{autenticacaoMB.reirecionarTelaConsultarAtendimento}" rendered="#{item.toString() ne '-'}">
+                                                <f:setPropertyActionListener value="#{item}" target="#{autenticacaoMB.objAtendimento.codigoAtendimento}"/>
+                                            </h:commandLink>
+                                            <h:outputLabel value="#{item.toString()}" rendered="#{item.toString() eq '-'}"/>
+                                        </center>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </div>
+                    </div>
+
+                    <div style="clear: both"></div>
+                    <br/>
+                </div>
+                <br/>
+                <br/>
+                <div id="bottom">
+                    <ui:insert name="bottom"></ui:insert>
+                    <!-- div footer-->
+                    <div id="footer">
+                        <br/>
+                        <font size="1" color="white" style="margin-left: 15px;">
+                            <!--Endereço: Rua Sergipe Nº 0, Siqueira Campos (Esquina com Rua Porto Alegre) Aracaju-SE -->
+                            <center>Copyright © 2015 SAMU ONLINE.
+                                Todos os direitos reservados. Desenvolvido pela Equipe do SAMU ONLINE.
+                                Política de Privacidade</center>
+                        </font>
+                        <br/><br/>
+                    </div>	
+                </div>
+            </div>
+        </f:view>
+    </body>
+</html>

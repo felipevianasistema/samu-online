@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+        <ui:composition template="./WEB-INF/template/template.xhtml">
+            <ui:define name="top">
+                <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+                <script language="javascript" type="text/javascript" src="#{request.contextPath}/resources/js/mapa-ocorrencia.js" charset="utf-8"/>
+                <script>
+                    $(document).ready(function () {
+                        $('#mapa-ocorrencia').addClass('on');
+                        initialize();
+                    });
+                </script>
+            </ui:define>
+
+            <ui:define name="content">
+                <br/>
+                <h:form id="form" prependId="false">
+                    <fieldset class="fieldset-content scroll-vertical">
+                        <legend style="padding: 5px;">
+                            <font face="arial" size="2" >Mapa de Ocorrência</font>
+                        </legend>
+                        <div class="bg">
+                            <div class="bg-top">
+                                <br/><br/>
+                            </div>
+                            <div>
+                                <br/>
+                                <h:panelGrid columns="2" styleClass="formulario">
+
+                                    <p:outputLabel for="origem" value="Origem:"/>
+                                    <p:inputText id="origem" value="" size="50"/>
+
+                                    <p:outputLabel for="destino" value="Destino:"/>
+                                    <p:inputText id="destino" size="50"/>
+                                </h:panelGrid>
+                            </div>
+                            <br/>
+                            <p:commandButton styleClass="btn" type="button" value="Traçar rota" onclick="calcRoute();"/>
+                            <br/><br/>
+                            <div id="mapview">
+                                <div id="map_canvas" class="mapa_ocorrencia"></div>
+                                <br/>
+                                <div id="direcao" class="mapa_ocorrencia_direcao">
+                                    <br/>
+                                    <p style="margin-left: 18px;">Siga o destino:</p>
+                                    <center><div id="directionsPanel" class="mapa_ocorrencia_painel_direcao"></div></center>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </h:form>
+            </ui:define>
+            <ui:define name="bottom"></ui:define>
+        </ui:composition>
+    </body>
+</html>

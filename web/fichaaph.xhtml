@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./WEB-INF/template/template.xhtml">
+
+            <ui:define name="top">
+                <script src="#{request.contextPath}/resources/js/jquery-clockpicker.min.js" charset="UTF-8"></script>
+                <link rel="stylesheet" href="#{request.contextPath}/resources/css/jquery-clockpicker.min.css"></link>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('#ficha-aph').addClass('on');
+                        $('.clockpicker').clockpicker();
+                    });
+                </script>
+
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form prependId="false" id="form">
+                    <fieldset class="fieldset-content scroll-vertical">
+                        <legend style="padding: 5px;">
+                            <font face="arial" size="2" >
+                                Ficha APH
+                            </font> 
+                        </legend>
+                        <p><p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/></p>
+                        <div class="bg">
+                            <div class="bg-top">
+                                <br/><br/>
+                            </div>
+                            <br/>
+                            <h:panelGrid columns="3" styleClass="formulario">
+                                <p:outputLabel for="numero-chamado" value="Número do chamado:"/>
+                                <p:inputMask mask="?999999999" id="numero-chamado" maxlength="10" size="10" value="#{fichaAphMB.objAtendimento.codigoAtendimento}"/>
+                                <p:commandButton ajax="false" value="Consultar" actionListener="#{fichaAphMB.filtrarPesquisa}"/>
+                            </h:panelGrid>
+                            <br/><br/><br/>
+                            <h:panelGroup styleClass="formulario form_cadastro" binding="#{fichaAphMB.renderPanelFicha}">
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="Código:"/>
+                                    <p:outputLabel value="#{fichaAphMB.objAtendimento.codigoAtendimento}"/>
+
+                                    <h:outputLabel value="Status:"/>
+                                    <h:selectOneMenu styleClass="ui-selectonemenu-label ui-inputfield ui-corner-all" value="#{fichaAphMB.objAtendimento.statusAtendimento}">
+                                        <f:selectItem itemLabel="Finalizado" itemValue="3"/>
+                                    </h:selectOneMenu>
+
+                                    <p:outputLabel value="Hora da transmissão:"/>
+                                    <p:inputMask mask="99:99" styleClass="clockpicker" size="5" maxlength="5" value="#{fichaAphMB.objAtendimento.objFichaAph.horaTransmissao}" required="true" requiredMessage="Informe a hora da transmissão."/>
+
+                                    <p:outputLabel value="Hora da chegada no local:"/>
+                                    <p:inputMask mask="99:99" styleClass="clockpicker" size="5" maxlength="5" value="#{fichaAphMB.objAtendimento.objFichaAph.horaChegadaLocal}" required="true" requiredMessage="Informe a hora da chegada no local."/>
+
+                                    <p:outputLabel value="Hora da saída do local:"/>
+                                    <p:inputMask mask="99:99" styleClass="clockpicker"  size="5" maxlength="5" value="#{fichaAphMB.objAtendimento.objFichaAph.horaSaidaLocal}" required="true" requiredMessage="Informe a hora da saída do local."/>
+
+                                    <p:outputLabel value="Hora da chegada no hospital:"/>
+                                    <p:inputMask mask="99:99" styleClass="clockpicker"  size="5" maxlength="5" value="#{fichaAphMB.objAtendimento.objFichaAph.horaChegadaHospital}" required="true" requiredMessage="Informe a hora da chegada no hospital."/>
+
+                                    <p:outputLabel value="Hora da ligação:"/>
+                                    <p:inputMask mask="99:99"  styleClass="clockpicker"  size="5" maxlength="5" value="#{fichaAphMB.objAtendimento.objFichaAph.horaLigacao}" required="true" requiredMessage="Informe a hora da ligação."/>
+
+                                    <p:outputLabel value="Produtos utilizados:"/>
+                                    <p:inputTextarea cols="32" rows="5" counter="display" maxlength="800" counterTemplate="{0} caracteres restante(s)." autoResize="false" value="#{fichaAphMB.objAtendimento.objFichaAph.produtosUtilizado}" required="true" requiredMessage="Informe os produtos utilizados."/>
+
+                                    <h:outputText value=""/>
+                                    <h:outputText id="display"/> 
+                                </h:panelGrid>
+                                <br/><br/>
+                                <h:panelGrid columns="4" styleClass="formulario">
+                                    <p:commandButton ajax="false" value="Cadastrar" actionListener="#{fichaAphMB.adicionar}"/>
+                                </h:panelGrid>
+                            </h:panelGroup>
+                        </div>
+                    </fieldset>
+                </h:form>
+            </ui:define>
+            <ui:define name="bottom">
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

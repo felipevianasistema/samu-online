@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <body>
+
+        <ui:composition template="./WEB-INF/template/template.xhtml">
+
+            <ui:define name="top">
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('#funcionario').addClass('on');
+                    });
+                </script>
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="form">
+                    <fieldset class="fieldset-content scroll-vertical">
+                        <legend style="padding: 5px;">
+                            <font face="arial" size="2" >Funcionário</font>
+                        </legend>
+                        <p><p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/></p>
+                        <div class="bg">
+                            <div class="bg-top">
+                                <br/><br/>
+                            </div>
+                            <center>
+                                <br/>
+                                <h:panelGrid columns="4" styleClass="formulario  " rendered="#{usuarioFuncionarioMB.rendFiltro}">
+                                    <p:outputLabel for="filtro-nome" value="Nome: "/>
+                                    <p:inputText id="filtro-nome" maxlength="60" value="#{usuarioFuncionarioMB.objUsuarioFuncionario.nome}"/>
+                                    <p:commandButton ajax="false" value="Filtrar" actionListener="#{usuarioFuncionarioMB.filtrarPesquisa}"/>
+                                    <p:commandButton value="Todos" ajax="false" actionListener="#{usuarioFuncionarioMB.consultar}"/>
+                                </h:panelGrid>
+                                <br/>
+                            </center>
+
+                            <p:dataTable var="item" value="#{usuarioFuncionarioMB.objListaFuncionarios}"
+                                         emptyMessage="Nenhum registro encontrado."
+                                         paginator="true" rows="10"
+                                         rowsPerPageTemplate="5,10,15" rendered="#{usuarioFuncionarioMB.rendGrid}">
+
+                                <p:column headerText="Nome" sortBy="#{item.nome}">
+                                    <h:outputLabel value="#{item.nome}"/>
+                                </p:column>
+
+                                <p:column headerText="Usuário" sortBy="#{item.usuario}">
+                                    <h:outputLabel value="#{item.usuario}"/>
+                                </p:column>
+
+                                <p:column headerText="E-mail" style="white-space: normal;">
+                                    <h:outputLabel value="#{item.email}"/>
+                                </p:column>
+
+                                <p:column headerText="Status" width="5">
+                                    <center>
+                                        <h:outputLabel value="Inativo" rendered="#{item.situacao == 0}"/>
+                                        <h:outputLabel value="Ativo" rendered="#{item.situacao == 1}"/>
+                                    </center>
+                                </p:column>
+
+                                <p:column headerText="Skype" width="5">
+                                    <center>
+                                        <a href="#{item.skype}">
+                                            <h:graphicImage value="/img/skype.png" alt="Skype" title="Skype"/>
+                                        </a>
+                                    </center>
+                                </p:column>
+
+                                <p:column headerText="Visualizar" width="5">
+                                    <center>
+                                        <p:commandLink ajax="true" update="@form" oncomplete="dlg.show()" >
+                                            <p:graphicImage value="/img/visualizar.png" title="Visualizar" alt="Visualizar"/>
+                                            <f:setPropertyActionListener value="#{item}" target="#{usuarioFuncionarioMB.objUsuarioFuncionario}"/>
+                                        </p:commandLink>
+                                    </center>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </fieldset>
+
+                    <!-- Visualizar informações -->
+                    <p:dialog id="basicDialog" hideEffect="drop" header="Funcionário" widgetVar="dlg" modal="true" resizable="false">
+                        <h:panelGrid columns="2" styleClass="formulario">
+
+                            <p:outputLabel value="Nome:"/>
+                            <p:outputLabel value="#{usuarioFuncionarioMB.objUsuarioFuncionario.nome}"/>
+
+                            <p:outputLabel value="Usuário: "/>
+                            <p:outputLabel value="#{usuarioFuncionarioMB.objUsuarioFuncionario.usuario}"/>
+
+                            <p:outputLabel value="Senha:"/>
+                            <p:outputLabel value="Não disponível"/>
+
+                            <p:outputLabel value="Cpf:"/>
+                            <h:outputText converter="cpfConverter" value="#{usuarioFuncionarioMB.objUsuarioFuncionario.cpf}"/>
+
+                            <p:outputLabel value="Status:"/>
+                            <p:outputLabel value="Ativo" rendered="#{usuarioFuncionarioMB.objUsuarioFuncionario.situacao == 1}"/>
+                            <p:outputLabel value="Inativo" rendered="#{usuarioFuncionarioMB.objUsuarioFuncionario.situacao == 0}"/>
+                            <!--
+                            <p:outputLabel value="Skype:"/>
+                            <p:outputLabel value="{usuarioFuncionarioMB.objUsuarioFuncionario.skype}"/>
+                            -->
+                            <p:outputLabel value="E-mail:"/>
+                            <p:outputLabel value="#{usuarioFuncionarioMB.objUsuarioFuncionario.email}"/>
+
+                            <p:outputLabel value="Perfil:"/>
+                            <p:outputLabel value="#{usuarioFuncionarioMB.objUsuarioFuncionario.objPerfil.nome}"/>
+
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+            <ui:define name="bottom">
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
