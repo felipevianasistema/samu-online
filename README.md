@@ -13,7 +13,7 @@
     - Bases
     - Atendimento
     - Ficha APH
-    - Painel compartilhados para exibição dos últimos chamados cadastrados
+    - Painel compartilhado para exibição dos últimos chamados cadastrados
 3. Tecnologias utilizadas
     - Tomcat
     - Java
