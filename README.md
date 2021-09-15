@@ -1,5 +1,8 @@
 # samu-online
-1. Projeto - TCC
+
+Projeto desenvolvido em 2014 como projeto de faculdade.
+
+1. Projeto -
     Samu Online
 2. Funcionalidades
     - Home
